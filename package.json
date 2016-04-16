@@ -1,0 +1,45 @@
+{
+  "name": "roll-player",
+  "version": "0.1.0",
+  "description": "A webserver and web application for playing table top rpgs",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "watch": "node ./node_modules/builder/main.js -j ./src/website/js/ -c ./src/website/css/ -t ./src/website/jade/ -d ./build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msarchet/roll-player.git"
+  },
+  "keywords": [
+    "RPG",
+    "D&D",
+    "Games",
+    "Roll",
+    "Playing"
+  ],
+  "author": "Michael Sarchet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/msarchet/roll-player/issues"
+  },
+  "homepage": "https://github.com/msarchet/roll-player#readme",
+  "dependencies": {
+    "babel-core": "^6.7.6",
+    "babel-loader": "^6.2.4",
+    "babel-preset-react": "^6.5.0",
+    "express": "^4.13.4",
+    "express-jade": "0.0.3",
+    "jade": "^1.11.0",
+    "normalize.css": "^4.1.1",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1",
+    "socket.io": "^1.4.5",
+    "webpack": "^1.13.0"
+  },
+  "devDependencies": {
+    "builder": "github:msarchet/builder",
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.1"
+  }
+}
