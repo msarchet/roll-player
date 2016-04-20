@@ -1,4 +1,4 @@
-import {messageHandlers} from './handlers/messageHandlers';
+import {MessageHandlers} from './messageHandlers';
 export class ChatHandler {
   constructor() {
     this.socket = io();
@@ -12,6 +12,7 @@ export class ChatHandler {
     let messageType = message.type;
     let handler = messageHandlers[messageType];
     let parsed = handler(message);
+    console.log(parsed);
   }
 
 }

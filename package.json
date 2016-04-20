@@ -40,6 +40,9 @@
   "devDependencies": {
     "builder": "github:msarchet/builder",
     "css-loader": "^0.23.1",
+    "gulp": "^3.9.1",
+    "gulp-jade": "^1.1.0",
+    "gulp-webpack": "^1.5.0",
     "style-loader": "^0.13.1"
   }
 }
