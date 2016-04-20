@@ -11,6 +11,7 @@ const operatorPrecedence = {
   '+': 1,
   '-': 1
 }
+
 const parse = (roll, callback) => {
   let tokenized = roll.split('');
   // rejoin numbers
@@ -29,14 +30,11 @@ const parse = (roll, callback) => {
       let token = tokenized[index];
       if(token == 'r') {
         let next = tokenized[index + 1];
-        console.log('next character', next, tokenized);
         if(next == 'o' || next == '<' || next == '>') {
-          console.log('moving next over', next);
           token += next;
           index++;
         }
       }
-      console.log('token is', token);
       joined.push(token);
     }
     index++;
@@ -176,7 +174,6 @@ const shouldReroll = (value, target, type) => {
   switch(type) {
     case 'ro': 
     case 'r':
-      console.log('value|target', value, '|', target);
       return value == target;
     case 'r<':
       return value <= target;
@@ -196,7 +193,7 @@ const reroll = (roll, target, token) => {
     values = roll.values.map((value) => {
       if(shouldReroll(value.roll, target, token)) {
         let newRoll = random.die(roll.sides)(engine);
-        return {roll: newRoll, original: value}; 
+        return {roll: newRoll, original: value, rerollCount: 1}; 
       }
 
       return value;
@@ -204,12 +201,15 @@ const reroll = (roll, target, token) => {
   } else if(token == 'r<' || token == 'r>' || token == 'r') {
     values = roll.values.map((value) => {
       let newRoll = 0;
-      let rerollCount = 0;
-      while(shouldReroll(newRoll || value.roll, target, token)) {
+      let rerollCount = value.rerollCount || 0;
+      while(shouldReroll(newRoll || value.roll, target, token) && rerollCount < 100) {
         newRoll = random.die(roll.sides)(engine);
         rerollCount++;
       }
       if(rerollCount > 0) {
+        if(rerollCount === 100) {
+
+        }
         return {roll: newRoll, original: value, rerollCount}; 
       }
       return value;
@@ -234,5 +234,10 @@ const isOperator = token => {
 module.exports = {
   parse,
   roll,
-  sum
+  sum,
+  reroll,
+  createDie,
+  createKeep,
+  createMath,
+  shouldReroll
 }
