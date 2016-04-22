@@ -12,7 +12,6 @@ export class ChatHandler {
     let messageType = message.type;
     let handler = messageHandlers[messageType];
     let parsed = handler(message);
-    console.log(parsed);
   }
 
 }

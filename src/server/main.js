@@ -8,14 +8,17 @@ let server = http.Server(app);
 let io = require('socket.io')(server);
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/build/src/website/jade/index.html');
+  res.sendFile(__dirname + '/build/website/html/index.html');
 });
 
-app.use('/static', express.static('./build/src/website'));
+app.use('/static', express.static('./build/website'));
 
 io.on('connection', (socket) => {
-  console.log('got a connection');
-  socket.emit('message', {type: 'message', data: 'hello!'});
+  let greeting = {message: 'hello!'};
+  socket.emit('message', {type: 'message', message: greeting});
+  socket.on('message', message => {
+    socket.broadcast.emit('message', {type: 'message', message});
+  });
 });
 server.listen(9000, () => {
   console.log('Roll Player - Server Running on Port 9000');

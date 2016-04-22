@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "test",
-    "watch": "node ./node_modules/builder/main.js -j ./src/website/js/ -c ./src/website/css/ -t ./src/website/jade/ -d ./build"
+    "watch": "node ./node_modules/builder/main.js -j ./src/website/js/ -c ./src/website/css/ -t ./src/website/jade/ -d ./build",
+    "serve": "node ./src/server/main.js"
+
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,9 @@
     "normalize.css": "^4.1.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.1",
+    "redux-form": "^5.1.1",
     "socket.io": "^1.4.5",
     "webpack": "^1.13.0"
   },
@@ -42,6 +47,7 @@
     "css-loader": "^0.23.1",
     "gulp": "^3.9.1",
     "gulp-jade": "^1.1.0",
+    "gulp-watch": "^4.3.5",
     "gulp-webpack": "^1.5.0",
     "style-loader": "^0.13.1"
   }

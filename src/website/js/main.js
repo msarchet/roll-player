@@ -1,7 +1,19 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
-import {ChatHandler} from './chatHandler';
+import React from 'react';
+import {render} from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore, combineReducers} from 'redux';
+import rollPlayApp from './reducers';
+import {reducer as formReducer} from 'redux-form';
+import App from './app';
+import {getSocket} from './sockets';
 
-import {Chat} from './chat';
+let store = createStore(combineReducers({
+  form: formReducer,
+  rollPlayApp
+}));
 
-ReactDOM.render(<Chat />, document.body);
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+, document.getElementById('main'));
