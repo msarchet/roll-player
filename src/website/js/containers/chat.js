@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     send: (e) => {
-      dispatch(send(e.message));
+      dispatch(send({message: e.message}));
       dispatch(reset('chatInput'));
     }
   }

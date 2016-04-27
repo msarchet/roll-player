@@ -1,20 +1,35 @@
 'use strict';
-
+const roller = require('../../roller');
 let commands = {
-  'roll': message => {
-    return {type: 'rolled', message: message.message};
+  'roll': (args, cb) => {
+    roller.parse(args, (err, parsed) => {
+      if(err) {
+        cb(err);
+        return;
+      }
+      roller.roll(parsed, (_err, result) => {
+        if(_err) {
+          cb(_err);
+          return;
+        }
+        cb(null, {type: 'rolled', message: {result, value: result.value()}} );
+        return;
+      });
+    })
   }
 }
 
-module.exports = (message, cb) => {
+module.exports = (messageObj, cb) => {
+  let message = messageObj.message;
   if(message.message[0] === '/') {
-    let command = message.message.split(' ')[0].substring(1);
+    let parts = message.message.split(' ');
+    let command = parts[0].substring(1);
     let handler = commands[command];
     if(handler) {
-      cb(null, handler());
+      handler(parts[1], cb);
       return;
     } 
   }
-  cb(null, message.message);
+  cb(null, message);
   return 
 }
