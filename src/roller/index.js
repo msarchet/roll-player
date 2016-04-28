@@ -196,6 +196,9 @@ const reroll = (roll, target, token) => {
     throw new Error('Can\'t reroll a non-roll');
   }
 
+  // we should check if the reroll value is wholy inclusive of all die sides
+  // 1d1r1 would roll forever, so we should just bail out
+  // 1d1ro1 is fine, since we only ever reroll once
   let targets = roll.targets || [];
   targets.push(target);
   let values = [];
@@ -218,7 +221,7 @@ const reroll = (roll, target, token) => {
       }
       if(rerollCount > 0) {
         if(rerollCount === 100) {
-
+          // we don't want to roll forever, but it's possible with someone rolling 1d1r1 or similar
         }
         return {roll: newRoll, original: value, rerollCount}; 
       }
