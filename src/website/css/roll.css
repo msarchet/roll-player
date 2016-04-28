@@ -1,0 +1,28 @@
+.container {
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.roll {
+  border: 1px solid;
+}
+.value {
+  font-size: 2em;
+}
+
+.dieInfo {
+  font-size: 0.6em;
+}
+
+.dice {
+  font-size: 0.5em;
+}
+
+.dice--crit {
+  color: green;
+}
+
+.dice--fail {
+  color: red;
+}

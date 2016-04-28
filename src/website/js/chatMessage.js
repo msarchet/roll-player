@@ -12,7 +12,7 @@ const ChatMessage = ({messageObj}) => {
         </div>
       );
   } if(messageType === 'rolled') {
-    return (<DieRoll className={style.dieRoll} roll={message} />) 
+    return (<DieRoll className={styles.dieRoll} roll={message} />) 
   }else {
       return(
         <div className={styles.container}>
