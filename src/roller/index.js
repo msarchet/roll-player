@@ -1,6 +1,7 @@
 'use strict';
 const random = require('random-js');
 const engine = random.engines.mt19937().autoSeed();
+
 const operatorPrecedence = {
   'd': 0,
   'k': 0,
@@ -13,18 +14,22 @@ const operatorPrecedence = {
 }
 
 const parse = (roll, callback) => {
+  // this currently requires two passes over the input
+  // for now this is fine. Since most commands are small
+  // this should be optimized at some point
   let tokenized = roll.split('');
-  // rejoin numbers
   let index = 0;
   let joined = [];
-  let current = [];
+
+  let collected = [];
+
   while(index < tokenized.length) {
     if(!isOperator(tokenized[index])) {
-      current.push(tokenized[index]);
+      collected.push(tokenized[index]);
     } else {
-      if(current.length > 0) {
-        let join = current.join('');
-        current = [];
+      if(collected.length > 0) {
+        let join = collected.join('');
+        collected = [];
         joined.push(join);
       }
       let token = tokenized[index];
@@ -39,11 +44,12 @@ const parse = (roll, callback) => {
     }
     index++;
   }
-  if(current.length > 0) {
-    let join = current.join('');
-    current = [];
+  if(collected.length > 0) {
+    let join = collected.join('');
+    collected = [];
     joined.push(join);
   }
+
   tokenized = joined;
   let token = null; 
   let output = [];
@@ -86,6 +92,10 @@ const evaluate = rpn => {
     }
   }
 
+  // currently all operations take 2 arguments
+  // it's possible that we have an operation that takes
+  // more than two arguments, but right now we do not
+  // 2d6 -> 2 6 d
   let left = rpn[index - 2];
   let right = rpn[index - 1];
   let value = null;
