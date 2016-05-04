@@ -8,7 +8,7 @@ const Chat = ({chat, send}) => {
   console.log(chat);
   return (
     <div>
-      <h1>Chat</h1>
+      <h1>Chat Box</h1>
         {chat.length}
       <ul>
         {messages}

@@ -135,8 +135,9 @@ const sum = values => {
 
 const createDie = (number, sides) => {
   number = number || 1;
+  sides = +sides;
   let values = random.dice(sides, number)(engine).map(r => {
-    return {roll: r}
+    return {roll: r, isCrit: r === sides, isFail: r === 1, sides}
   });
   return {
     type: 'roll',
@@ -149,14 +150,17 @@ const createDie = (number, sides) => {
 }
 
 const createKeep = (roll, keep) => {
-  let values = roll.values.sort((a,b) => {
+  let sorted =  roll.values.sort((a,b) => {
     return a.roll > b.roll ? -1 : 1; 
-  }).slice(0, keep);
+  });
+  let values = sorted.slice(0, keep);
+  let dropped = sorted.slice(keep);
   return {
     type: 'keptDice',
     isRoll: true,
     number: keep,
     values,
+    dropped,
     originalRoll: roll,
     value: () => sum(values) 
   }

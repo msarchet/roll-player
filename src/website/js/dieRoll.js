@@ -1,61 +1,32 @@
 import React from 'react';
 import styles from '../css/roll.css';
-const formatRoll = (roll) => {
-  let maxValue = parseInt(roll.sides);
-  return (<span className={styles.roll}>
-    <span className={styles.dieInfo}>
-      Rolled: {roll.number}d{roll.sides}
-    </span>
-    {roll.values.map(die => {
-      let className = styles.dice;
-      if(die.roll === maxValue) {
-        className += ` ${styles['dice--crit']}`;
-      } else if(die.roll === 1) {
-        className += ` ${styles['dice--fail']}`;
-      }
-      return (
-        <span className={className}>{die.roll}</span>
-      )
-    })}
-  </span>);
-}
-const getDiceFromRoll = (roll) => {
-  if(roll.originalRoll) {
-    if(roll.modifier) {
-      let leftDie = getDiceFromRoll(roll.originalRoll);
-      let modifier = [];
-      // if the modifier is a roll
-      if(roll.modifier.isRoll != undefined) {
-        modifier = getDiceFromRoll(roll.modifier);
-      } else {
-        modifier = [roll.modifier];
-      }
-      return (
-        <span>
-        {leftDie}
-        {roll.operation}
-        {modifier}
-        </span>
-      )
-    }
-    return getDiceFromRoll(roll.originalRoll);
-  } else {
-    if(roll.isRoll) {
-      return [formatRoll(roll)];
-    }
-  }
-}
+import Roll from './roll';
 
-const DieRoll = ({roll}) => {
-  let dice = getDiceFromRoll(roll.result);
-  
-  return (
-    <div className={styles.container}>
-      <div className={styles.value}>
-        {roll.value}
-      </div>
-      {dice}
-    </div>)
+class DieRoll extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {hover: false};
+  }
+
+  onMouseOver() {
+    this.setState({hover:true});
+  }
+  onMouseOut() {
+    this.setState({hover:false});
+  }
+
+  render() {
+    let {roll} = this.props;
+    return (
+      <div className={styles.container} onMouseOver={this.onMouseOver.bind(this)} onMouseOut={this.onMouseOut.bind(this)}>
+        <div className={styles.value}>
+          {roll.value}
+        </div>
+        <div  className={this.state.hover ? styles['result--hover'] : styles.result}>
+          <Roll roll={roll.result}/>
+        </div>
+      </div>)
+  }
 }
 
 export default DieRoll;

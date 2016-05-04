@@ -30,6 +30,6 @@ module.exports = (messageObj, cb) => {
       return;
     } 
   }
-  cb(null, message);
+  cb(null,{ message });
   return 
 }
