@@ -2,15 +2,138 @@
 const random = require('random-js');
 const engine = random.engines.mt19937().autoSeed();
 
-const operatorPrecedence = {
-  'd': 0,
-  'k': 0,
-  'r': 0, 
-  'ro': 0,
-  'r<': 0,
-  'r>': 0,
-  '+': 1,
-  '-': 1
+const createDie = (number, sides) => {
+  number = +number || 1;
+  sides = +sides;
+  let values = random.dice(sides, number)(engine).map(r => {
+    return {roll: r, isCrit: r === sides, isFail: r === 1, sides}
+  });
+  return {
+    type: 'roll',
+    isRoll: true,
+    number,
+    sides,
+    values, 
+    value: () => sum(values)
+  }
+}
+
+const createKeep = (roll, keep) => {
+  let sorted =  roll.values.sort((a,b) => {
+    return a.roll > b.roll ? -1 : 1; 
+  });
+  let values = sorted.slice(0, keep);
+  let dropped = sorted.slice(keep);
+  return {
+    type: 'keptDice',
+    isRoll: true,
+    number: keep,
+    values,
+    dropped,
+    originalRoll: roll,
+    value: () => sum(values) 
+  }
+}
+
+const createMath = (roll, modifier, operation) => {
+  return {
+    type: 'modifiedRoll',
+    isRoll: false,
+    number: roll.length,
+    modifier: modifier,
+    operation: operation,
+    originalRoll: roll,
+    value: () => {
+      let modifierValue = modifier.value ? modifier.value() : parseInt(modifier);
+      if(operation == '+') {
+        return roll.value() + modifierValue;
+      } else if(operation == '-'){
+        return roll.value() - modifierValue;
+      }
+    }
+  }
+}
+
+const shouldReroll = (value, target, type) => {
+  switch(type) {
+    case 'ro': 
+    case 'r':
+      return value == target;
+    case 'r<':
+      console.log(value <= target);
+      return value <= target;
+    case 'r>':
+      return value >= target;
+  }
+}
+const reroll = (roll, target, token) => {
+  if(!roll.isRoll) {
+    throw new Error('Can\'t reroll a non-roll');
+  }
+
+  // we should check if the reroll value is wholy inclusive of all die sides
+  // 1d1r1 would roll forever, so we should just bail out
+  // 1d1ro1 is fine, since we only ever reroll once
+  let targets = roll.targets || [];
+  targets.push(target);
+  let values = [];
+  if(token == 'ro') {
+    values = roll.values.map((value) => {
+      if(shouldReroll(value.roll, target, token)) {
+        let newRoll = createDie(1, roll.sides);
+        newRoll.original = value;
+        newRoll.rerollCount = 1;
+        return newRoll;
+      }
+
+      return value;
+    });
+  } else if(token == 'r<' || token == 'r>' || token == 'r') {
+    values = roll.values.map((value) => {
+      let newRoll = null;
+      let rerollCount = value.rerollCount || 0;
+      console.log('checking reroll');
+      let checkValue = (newRoll && newRoll.value()) || value.roll;
+      while(shouldReroll(checkValue, target, token) && rerollCount < 100) {
+        console.log('rerolling', checkValue, 'was less than target', target);
+        newRoll = createDie(1, roll.sides);
+        checkValue = newRoll.value();
+        console.log('new roll', newRoll);
+        rerollCount++;
+      }
+      if(rerollCount > 0) {
+        if(rerollCount === 100) {
+          // we don't want to roll forever, but it's possible with someone rolling 1d1r1 or similar
+        }
+        newRoll.original = value;
+        newRoll.rerollCount = rerollCount;
+        console.log('returning rerolled value');
+        return newRoll;
+      }
+      console.log('returning original roll');
+      return value;
+    });
+  }
+  return {
+    type: 'rerollRoll',
+    isRoll: true,
+    originalRoll: roll,
+    targets,
+    values,
+    number: roll.number,
+    sides: roll.sides,
+    value: () => sum(values)
+  }
+}
+const operatorTable = {
+  'd' : {precedence: 0, operation: createDie, args: 2},
+  'k' : {precedence: 0, operation: createKeep, args: 2},
+  'r' : {precedence: 0, operation: reroll, args: 2}, 
+  'ro': {precedence: 0, operation: reroll, args: 2},
+  'r<': {precedence: 0, operation: reroll, args: 2},
+  'r>': {precedence: 0, operation: reroll, args: 2},
+  '+' : {precedence: 1, operation: createMath, args: 2},
+  '-' : {precedence: 1, operators: createMath, args: 2}
 }
 
 const parse = (roll, callback) => {
@@ -57,8 +180,11 @@ const parse = (roll, callback) => {
   // start construction of the tree
   while(token = tokenized.shift()) {
     if(isOperator(token)) {
+
+      // this really should move all lower precendece operators off the stack
+      // this isn't a problem since we have no grouping operations
       let top = operators[operators.length - 1];
-      if(top != null && operatorPrecedence[top] <= operatorPrecedence[token]) {
+      if(top != null && operatorTable[top].precedence <= operatorTable[token].precedence) {
         output.push(operators.pop());
       }
       operators.push(token);
@@ -118,6 +244,8 @@ const evaluate = rpn => {
       break;
   }
 
+  console.log('value', value);
+
   let start = index - 2;
   start = start < 0 ? 0 : start;
   let countToRemove = index - start + 1;
@@ -133,119 +261,8 @@ const sum = values => {
   return values.reduce((i, v) => i += v.roll, 0);
 }
 
-const createDie = (number, sides) => {
-  number = number || 1;
-  sides = +sides;
-  let values = random.dice(sides, number)(engine).map(r => {
-    return {roll: r, isCrit: r === sides, isFail: r === 1, sides}
-  });
-  return {
-    type: 'roll',
-    isRoll: true,
-    number,
-    sides,
-    values, 
-    value: () => sum(values)
-  }
-}
-
-const createKeep = (roll, keep) => {
-  let sorted =  roll.values.sort((a,b) => {
-    return a.roll > b.roll ? -1 : 1; 
-  });
-  let values = sorted.slice(0, keep);
-  let dropped = sorted.slice(keep);
-  return {
-    type: 'keptDice',
-    isRoll: true,
-    number: keep,
-    values,
-    dropped,
-    originalRoll: roll,
-    value: () => sum(values) 
-  }
-}
-
-const createMath = (roll, modifier, operation) => {
-  return {
-    type: 'modifiedRoll',
-    isRoll: false,
-    number: roll.length,
-    modifier: modifier,
-    operation: operation,
-    originalRoll: roll,
-    value: () => {
-      let modifierValue = modifier.value ? modifier.value() : parseInt(modifier);
-      if(operation == '+') {
-        return roll.value() + modifierValue;
-      } else if(operation == '-'){
-        return roll.value() - modifierValue;
-      }
-    }
-  }
-}
-const shouldReroll = (value, target, type) => {
-  switch(type) {
-    case 'ro': 
-    case 'r':
-      return value == target;
-    case 'r<':
-      return value <= target;
-    case 'r>':
-      return value >= target;
-  }
-}
-const reroll = (roll, target, token) => {
-  if(!roll.isRoll) {
-    throw new Error('Can\'t reroll a non-roll');
-  }
-
-  // we should check if the reroll value is wholy inclusive of all die sides
-  // 1d1r1 would roll forever, so we should just bail out
-  // 1d1ro1 is fine, since we only ever reroll once
-  let targets = roll.targets || [];
-  targets.push(target);
-  let values = [];
-  if(token == 'ro') {
-    values = roll.values.map((value) => {
-      if(shouldReroll(value.roll, target, token)) {
-        let newRoll = random.die(roll.sides)(engine);
-        return {roll: newRoll, original: value, rerollCount: 1}; 
-      }
-
-      return value;
-    });
-  } else if(token == 'r<' || token == 'r>' || token == 'r') {
-    values = roll.values.map((value) => {
-      let newRoll = 0;
-      let rerollCount = value.rerollCount || 0;
-      while(shouldReroll(newRoll || value.roll, target, token) && rerollCount < 100) {
-        newRoll = random.die(roll.sides)(engine);
-        rerollCount++;
-      }
-      if(rerollCount > 0) {
-        if(rerollCount === 100) {
-          // we don't want to roll forever, but it's possible with someone rolling 1d1r1 or similar
-        }
-        return {roll: newRoll, original: value, rerollCount}; 
-      }
-      return value;
-    });
-  }
-  return {
-    type: 'rerollRoll',
-    isRoll: true,
-    originalRoll: roll,
-    targets,
-    values,
-    number: roll.number,
-    sides: roll.sides,
-    value: () => sum(values)
-  }
-}
-
 const isOperator = token => {
-  return Object.keys(operatorPrecedence).indexOf(token) !== -1
+  return Object.keys(operatorTable).indexOf(token) !== -1
 }
 
 module.exports = {

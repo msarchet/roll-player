@@ -10,7 +10,7 @@ class Roll extends React.Component {
     let maxValue = parseInt(roll.sides);
     return (<span className={styles.roll}>
       <span className={styles.dieInfo}>
-        Rolled: {roll.number}d{roll.sides}
+        {roll.number}d{roll.sides}:{roll.values.length}
         <span>{roll.values.map(die => {
           let className = styles.dice;
           if(die.isCrit) {
@@ -27,13 +27,13 @@ class Roll extends React.Component {
   }
 
   getDiceFromRoll(roll) {
-    if(roll.originalRoll) {
+    if(roll.originalRoll && roll.type !== 'rerollRoll') {
       if(roll.modifier) {
-        let leftDie = getDiceFromRoll(roll.originalRoll);
+        let leftDie = this.getDiceFromRoll(roll.originalRoll);
         let modifier = [];
         // if the modifier is a roll
         if(roll.modifier.isRoll != undefined) {
-          modifier = getDiceFromRoll(roll.modifier);
+          modifier = this.getDiceFromRoll(roll.modifier);
         } else {
           modifier = [roll.modifier];
         }

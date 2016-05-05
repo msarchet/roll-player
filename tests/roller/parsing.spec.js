@@ -115,8 +115,8 @@ describe('Die Rolling', () => {
       roller.roll(['2', '6', 'd'], (err, rolled) => {
         expect(err).to.equal(null);
         expect(rolled.type).to.equal('roll');
-        expect(rolled.number).to.equal('2');
-        expect(rolled.sides).to.equal('6');
+        expect(rolled.number).to.equal(2);
+        expect(rolled.sides).to.equal(6);
         expect(rolled.values).to.have.property('length').to.equal(2);
         done();
       });
@@ -199,12 +199,12 @@ describe('Die Rolling', () => {
         });
       });
 
-      xit('should handle a complex roll', done => {
+      it('should handle a complex roll', done => {
         // 9d9+4d6k3+2
         roller.roll(['9', '9', 'd', '4', '6', 'd', '3', 'k', '+', '2', '+'], (_err, rolled) => {
           let final = rolled.value();
-          let d9Value = rolled.originalRoll.value();
-          let d6Value = rolled.modifier.originalRoll.value();
+          let d9Value = rolled.originalRoll.originalRoll.value();
+          let d6Value = rolled.originalRoll.modifier.value();
           expect(final).to.equal(d9Value + d6Value + 2);
           done();
         });
