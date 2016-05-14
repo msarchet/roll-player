@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from '../css/chat.css';
-import ChatInput from './containers/chatInput';
+import styles from '../../css/chat.css';
+import ChatInput from '../containers/chatInput';
 import ChatMessage from './chatMessage';
 
 const Chat = ({chat, send}) => {

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import Chat from '../chat';
+import Chat from '../components/chat';
 import {reset} from 'redux-form';
 import {send} from '../actions/chat';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../css/roll.css';
+import styles from '../../css/roll.css';
 
 class Roll extends React.Component {
   constructor(props) {
@@ -10,25 +10,34 @@ class Roll extends React.Component {
     let maxValue = parseInt(roll.sides);
     return (<span className={styles.roll}>
       <span className={styles.dieInfo}>
-        {roll.number}d{roll.sides}:{roll.values.length}
-        <span>{roll.values.map(die => {
+        <span className={styles.rollInput}>
+          {roll.input}
+        </span>
+        ({roll.values.map((die, i) => {
           let className = styles.dice;
           if(die.isCrit) {
             className += ` ${styles['dice--crit']}`;
           } else if(die.isFail) {
             className += ` ${styles['dice--fail']}`;
           }
+          let join = (i+1) === roll.values.length ? null : (<span>+</span>);
           return (
-            <span className={className}>{die.roll}</span>
+            <span>
+              <span className={className}>{die.roll ? die.roll : die.values ? die.values[0].roll : '?'}</span>
+              {join}
+            </span>
           )
-        })}</span>
+        })})
       </span>
     </span>);
   }
 
   getDiceFromRoll(roll) {
-    if(roll.originalRoll && roll.type !== 'rerollRoll') {
-      if(roll.modifier) {
+    switch(roll.type) {
+      case 'keptDice':
+      case 'rerollRoll':
+        return [this.formatRoll(roll)];
+      case 'modifiedRoll':
         let leftDie = this.getDiceFromRoll(roll.originalRoll);
         let modifier = [];
         // if the modifier is a roll
@@ -44,12 +53,8 @@ class Roll extends React.Component {
           {modifier}
           </span>
         )
-      }
-      return this.getDiceFromRoll(roll.originalRoll);
-    } else {
-      if(roll.isRoll) {
+      default:
         return [this.formatRoll(roll)];
-      }
     }
   }
 

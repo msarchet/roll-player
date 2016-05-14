@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from '../css/chat.css';
+import styles from '../../css/chat.css';
 import DieRoll from './dieRoll';
 const ChatMessage = ({messageObj}) => {
   let messageType = messageObj.type;

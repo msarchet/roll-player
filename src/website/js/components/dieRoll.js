@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../css/roll.css';
+import styles from '../../css/roll.css';
 import Roll from './roll';
 
 class DieRoll extends React.Component {

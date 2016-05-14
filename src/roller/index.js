@@ -14,6 +14,7 @@ const createDie = (number, sides) => {
     number,
     sides,
     values, 
+    input: `${number}d${sides}`,
     value: () => sum(values)
   }
 }
@@ -28,14 +29,17 @@ const createKeep = (roll, keep) => {
     type: 'keptDice',
     isRoll: true,
     number: keep,
+    sides: roll.sides,
     values,
     dropped,
     originalRoll: roll,
+    input: `${roll.input}k${keep}`,
     value: () => sum(values) 
   }
 }
 
 const createMath = (roll, modifier, operation) => {
+  let input = `${roll.input}${operation}${modifier.isRoll ? modifier.input : modifier}`
   return {
     type: 'modifiedRoll',
     isRoll: false,
@@ -43,6 +47,7 @@ const createMath = (roll, modifier, operation) => {
     modifier: modifier,
     operation: operation,
     originalRoll: roll,
+    input,
     value: () => {
       let modifierValue = modifier.value ? modifier.value() : parseInt(modifier);
       if(operation == '+') {
@@ -60,7 +65,6 @@ const shouldReroll = (value, target, type) => {
     case 'r':
       return value == target;
     case 'r<':
-      console.log(value <= target);
       return value <= target;
     case 'r>':
       return value >= target;
@@ -92,13 +96,10 @@ const reroll = (roll, target, token) => {
     values = roll.values.map((value) => {
       let newRoll = null;
       let rerollCount = value.rerollCount || 0;
-      console.log('checking reroll');
       let checkValue = (newRoll && newRoll.value()) || value.roll;
       while(shouldReroll(checkValue, target, token) && rerollCount < 100) {
-        console.log('rerolling', checkValue, 'was less than target', target);
         newRoll = createDie(1, roll.sides);
         checkValue = newRoll.value();
-        console.log('new roll', newRoll);
         rerollCount++;
       }
       if(rerollCount > 0) {
@@ -107,10 +108,8 @@ const reroll = (roll, target, token) => {
         }
         newRoll.original = value;
         newRoll.rerollCount = rerollCount;
-        console.log('returning rerolled value');
         return newRoll;
       }
-      console.log('returning original roll');
       return value;
     });
   }
@@ -120,9 +119,19 @@ const reroll = (roll, target, token) => {
     originalRoll: roll,
     targets,
     values,
+    input: `${roll.input}${token}${target}`,
     number: roll.number,
     sides: roll.sides,
-    value: () => sum(values)
+    value: () => values.reduce((total, die) => {
+      if(die.roll) {
+        return total += die.roll;
+      } 
+      if(die.isRoll) {
+        return total += die.values.reduce((subtotal, die) => {
+          return subtotal += die.roll;
+        }, 0);
+      }
+    }, 0)
   }
 }
 const operatorTable = {
@@ -244,7 +253,6 @@ const evaluate = rpn => {
       break;
   }
 
-  console.log('value', value);
 
   let start = index - 2;
   start = start < 0 ? 0 : start;
