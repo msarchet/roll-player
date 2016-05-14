@@ -1,0 +1,53 @@
+.container {
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.roll {
+  display: flex;
+}
+.value {
+  font-size: 2em;
+}
+
+.result {
+  display: none;
+}
+
+.result--hover {
+  display: inherit;
+}
+
+.dieInfo {
+  font-size: 0.6em;
+  color: blue;
+}
+
+.dieInfo::last-child > .join {
+ display: none; 
+}
+
+.join {
+
+}
+
+.rollInput {
+  font-size: 1.0em;
+}
+
+.rollResult {
+  display: flex;
+  flex-direction: row;
+}
+.dice {
+  font-size: 0.5em;
+}
+
+.dice--crit {
+  color: green;
+}
+
+.dice--fail {
+  color: red;
+}

@@ -1,2 +1,4 @@
 'use strict';
-exports const CHAT = 'CHAT';
+const CHAT = 'chat';
+
+module.exports = {CHAT}

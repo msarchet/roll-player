@@ -20,6 +20,6 @@ let jadeTask = () => {
 gulp.task('jade', jadeTask);
 
 gulp.task('watch', () => {
-  watch('./src/website/js/**/*.js', webpackTask);
+  watch(['./src/website/js/**/*.js', './src/website/css/**/*.css'], webpackTask);
   watch('./src/website/html/**/*.jade', jadeTask);
 })

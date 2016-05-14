@@ -1,3 +1,11 @@
 .chat {
   color: red;
 }
+
+.container {
+  list-style: none;
+}
+
+.plainChat {
+  font-size: 14px;
+}

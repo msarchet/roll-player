@@ -7,7 +7,6 @@
     "test": "test",
     "watch": "node ./node_modules/builder/main.js -j ./src/website/js/ -c ./src/website/css/ -t ./src/website/jade/ -d ./build",
     "serve": "node ./src/server/main.js"
-
   },
   "repository": {
     "type": "git",
@@ -52,6 +51,7 @@
     "gulp-jade": "^1.1.0",
     "gulp-watch": "^4.3.5",
     "gulp-webpack": "^1.5.0",
+    "sinon": "^1.17.3",
     "style-loader": "^0.13.1"
   }
 }

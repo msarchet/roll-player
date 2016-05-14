@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import Chat from '../chat';
+import Chat from '../components/chat';
 import {reset} from 'redux-form';
 import {send} from '../actions/chat';
 
@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     send: (e) => {
-      dispatch(send(e.message));
+      dispatch(send({message: e.message}));
       dispatch(reset('chatInput'));
     }
   }
