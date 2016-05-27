@@ -17,9 +17,13 @@ app.use('/static', express.static('./build/website'));
 
 io.on('connection', (socket) => {
   socket.on('message', message => {
-    socketHandler.parse(message, (err, result) => {
-      socket.emit('message', result);
-    });
+    socketHandler.parse(message)
+      .then(result => {
+        socket.emit('message', result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });;
   });
 });
 
