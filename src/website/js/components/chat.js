@@ -4,7 +4,11 @@ import ChatInput from '../containers/chatInput';
 import ChatMessage from './chatMessage';
 
 const Chat = ({chat, send}) => {
-  let messages = chat.map(message => {return (<ChatMessage messageObj={message} />)}) 
+  let count = 0;
+  let messages = chat.map(message => {
+    count++;
+    return (<ChatMessage key={count} messageObj={message} />)
+  });
   return (
     <div className={styles.outerContainer}>
       <ul className={styles.messages}>
