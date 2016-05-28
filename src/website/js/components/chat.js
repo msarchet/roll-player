@@ -5,15 +5,15 @@ import ChatMessage from './chatMessage';
 
 const Chat = ({chat, send}) => {
   let messages = chat.map(message => {return (<ChatMessage messageObj={message} />)}) 
-  console.log(chat);
   return (
-    <div>
-      <h1>Chat Box</h1>
-        {chat.length}
-      <ul>
+    <div className={styles.outerContainer}>
+      <ul className={styles.messages}>
         {messages}
       </ul>
-      <ChatInput onSubmit={send} />
+      <div className={styles.inputContainer}>
+        <ChatInput onSubmit={send} />
+        <button onClick={send}>Send</button>
+      </div>
     </div>
   )
 }

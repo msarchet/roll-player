@@ -13,7 +13,7 @@ let store = createStore(combineReducers({
 }));
 
 render(
-  <Provider store={store}>
+  <Provider store={store} id="derp">
     <App />
   </Provider>
 , document.getElementById('main'));
