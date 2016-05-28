@@ -9,16 +9,16 @@ let io = require('socket.io')(server);
 let socketHandler = require('./socket');
 let path = require('path');
 
-app.get('/', (req, res) => {
+app.use('/static', express.static('./build/website'));
+
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname , '../../build/website/html/index.html'));
 });
-
-app.use('/static', express.static('./build/website'));
 
 io.on('connection', (socket) => {
   socket.on('message', message => {
     socketHandler.parse(message)
-      .then(result => {
+      .then(result => {        
         socket.emit('message', result);
       })
       .catch((err) => {

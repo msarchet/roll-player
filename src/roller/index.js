@@ -216,7 +216,8 @@ const roll = (rpn) => {
   let value = evaluate(rpn);
   return new Promise((resolve, reject) => {
     resolve(value);
-  });
+  });  
+
 };
 
 const evaluate = rpn => {
