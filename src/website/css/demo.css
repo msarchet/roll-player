@@ -8,3 +8,52 @@
 .title {
   font-family: sans-serif;
 }
+
+.navHeader {
+  width: 100%;
+  background-color: rgba(0, 0, 0, .8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: sans-serif;
+}
+
+.leftContainer {
+  border-bottom: 1px solid white;
+  margin-right: 20px;
+}
+
+.rightContainer {
+  border-bottom: 1px solid white;
+  margin-left: 20px;
+}
+
+.iconContainer {
+  font-size: 3em;
+  padding: 10px;
+  border: 5px solid red;
+  border-top: 0;
+  box-shadow: 2px 2px 2px 2px black;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.content {
+  width: 80%;
+  padding-bottom: 20px;
+  flex: 1;
+  display: flex;
+}
+
+.about {
+  font-size: 18px;
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  align-items: center;
+}

@@ -1,6 +1,6 @@
 const alert = (state = {}, action) => { 
   switch(action.type) {
-    case: 'NEW_ALERT':
+    case 'NEW_ALERT':
       return action.data;
     default:
       return state;
