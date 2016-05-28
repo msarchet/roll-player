@@ -11,6 +11,7 @@ const ChatComponent = () => (
   <Sockets>
     <div style={{flex: 1, flexDirection: 'column', display: 'flex'}}>
       <h1 className={styles.title}>Die Rolling Demo</h1>
+      <div style={{display: 'inline-block'}}><span>Stay informed with an </span><a href="http://eepurl.com/b3ByN1">email</a></div>
       <p> Mouse over results to see rolls</p>
       <Header />
       <Chat />
