@@ -1,5 +1,7 @@
+const path = require('path');
+
 module.exports = {
-  context: __dirname + '/src/website',
+  context: path.resolve(__dirname, 'src/website'),
   entry: './js/main.js',
   output: {
     path: __dirname + '/build/src/website',
