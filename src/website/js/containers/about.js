@@ -11,6 +11,7 @@ const About = () => (
       <span><a href="http://github.com/msarchet/roll-player"><FontAwesome name='github' style={{paddingRight: '5px'}}/>Github</a></span>
     </p>
     <p>
+      It'd be super cool if you want to sign up to my mailing list. <a href="http://eepurl.com/b3ByN1">Here</a>
     </p>
     <p>
       Follow me on the twitter if you want. 
