@@ -4,6 +4,7 @@ import FontAwesome from 'react-fontawesome';
 
 import Chat from './containers/chat';
 import Header from './containers/headers';
+import NotFound from './components/notFound';
 import Sockets from './containers/sockets';
 import styles from '../css/demo.css';
 
@@ -61,6 +62,7 @@ const App = () => (
     <Router history={browserHistory}>
       <Route path="/" component={ChatComponent} />
       <Route path="/about" component={About} />
+      <Route path="*" component={NotFound} />
     </Router>
     </div>
   </div>
