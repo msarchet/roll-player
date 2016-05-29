@@ -1,0 +1,22 @@
+.container {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.helpText {
+    margin: 5px;
+}
+.title {
+  font-family: sans-serif;
+}
+
+
+.content {
+  width: 80%;
+  padding-bottom: 20px;
+  flex: 1;
+  display: flex;
+}
+

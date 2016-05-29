@@ -16,12 +16,6 @@ nav {
   flex-direction: row;
   flex: 1; }
 
-#main > div {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
 #map {
   flex: 8;
   border: 1px solid blue; }
