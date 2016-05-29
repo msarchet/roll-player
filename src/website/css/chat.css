@@ -19,7 +19,8 @@
 
 .messages {
   flex: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .inputContainer {

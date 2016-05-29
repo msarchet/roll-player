@@ -11,12 +11,11 @@ const Chat = ({chat, send}) => {
   });
   return (
     <div className={styles.outerContainer}>
-      <ul className={styles.messages}>
+      <div className={styles.messages}>
         {messages}
-      </ul>
+      </div>
       <div className={styles.inputContainer}>
         <ChatInput onSubmit={send} />
-        <button onClick={send}>Send</button>
       </div>
     </div>
   )

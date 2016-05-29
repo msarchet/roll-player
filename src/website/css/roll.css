@@ -20,8 +20,7 @@
 }
 
 .dieInfo {
-  font-size: 0.6em;
-  color: blue;
+  font-size: 1em;
 }
 
 .dieInfo::last-child > .join {
@@ -41,7 +40,6 @@
   flex-direction: row;
 }
 .dice {
-  font-size: 0.5em;
 }
 
 .dice--crit {
