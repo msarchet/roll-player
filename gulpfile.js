@@ -12,7 +12,8 @@ let webpackTask = (config) => {
 };
 
 gulp.task('webpack', () => webpackTask(require('./webpack.config.js')));
-gulp.task('webpack-production', () => {
+
+const productionWebpack = () => {
   let wp = require('webpack');
   var config = Object.create(require('./webpack.config.js'));
   config.devtool = '';
@@ -25,7 +26,9 @@ gulp.task('webpack-production', () => {
     new wp.optimize.DedupePlugin(),
   ]);
   webpackTask(config);
-});
+}
+
+gulp.task('webpack-production', productionWebpack);
 
 let jadeTask = () => {
   return gulp.src('./src/website/html/**/*.jade')
@@ -33,6 +36,14 @@ let jadeTask = () => {
     .pipe(gulp.dest('./build/website/html'));
 }
 gulp.task('jade', jadeTask);
+
+gulp.task('build', ['jade'], () => {
+   if(process.env.NODE_ENV === 'production') {
+        productionWebpack();
+    } else {
+        webpackTask(require('./webpack.config.js'));
+    }
+});
 
 gulp.task('watch', () => {
   watch(['./src/website/js/**/*.js', './src/website/css/**/*.css'], () =>  webpackTask(require('./webpack.config.js')));
