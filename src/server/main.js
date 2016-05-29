@@ -2,13 +2,16 @@
 
 const express = require('express');
 const http = require('http');
+const path = require('path');
+const favicon = require('serve-favicon');
 
 let app = express();
+
 let server = http.Server(app);
 let io = require('socket.io')(server);
 let socketHandler = require('./socket');
-let path = require('path');
 
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
 app.use('/static', express.static('./build/website'));
 
 app.get('*', (req, res) => {

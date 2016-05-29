@@ -5,6 +5,8 @@ import FontAwesome from 'react-fontawesome';
 import Chat from './containers/chat';
 import Header from './containers/headers';
 import NotFound from './components/notFound';
+import Icon from './containers/icon';
+
 import Sockets from './containers/sockets';
 import styles from '../css/demo.css';
 
@@ -38,34 +40,43 @@ const About = () => (
     <p>
       Written using <a href="http://nodejs.org">Node.js</a>, <a href="http://facebook.github.io/React">React</a>, <a href="https://github.com/css-modules/css-modules">CSS Modules</a>, <a href="">Webpack</a>, <a href="http://www.gulpjs.com">Gulp</a>
     </p>
+    <p className={styles.column}>
+      <Icon size={'80px'} link={`https://thenounproject.com/daandirk/`} /> From Daan Dirk at The Noun Project
+    </p>
     <p>
       Probably far too much <a href="https://en.wikipedia.org/wiki/Coffee">Coffee</a>
     </p>
   </div>
 )
 
-const App = () => (
+const container = ({children}) => (
   <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
     <nav className={styles.navHeader}>
       <div className={styles.leftContainer}>
-        <a className={styles.link} href="/">Home</a>
+        <Link className={styles.link} to="/">Home</Link>
       </div>
       <div className={styles.iconContainer}>
-        <img className={styles.icon} src="/static/images/logo.svg"/>
+        <Icon />
         Roll Player
       </div>
       <div className={styles.rightContainer}>
-        <a className={styles.link} href="/About">About</a>
+        <Link className={styles.link} to="/about">About</Link>
       </div>
     </nav>
     <div className={styles.content}>
-    <Router history={browserHistory}>
-      <Route path="/" component={ChatComponent} />
-      <Route path="/about" component={About} />
-      <Route path="*" component={NotFound} />
-    </Router>
+      {children}
     </div>
   </div>
+);
+
+const App = () => (
+    <Router history={browserHistory}>
+      <Route component={container}>
+        <Route path="/" component={ChatComponent} />
+        <Route path="/about" component={About} />
+      </Route>
+      <Route path="*" component={NotFound} />
+    </Router>
 )
 
 export default App
