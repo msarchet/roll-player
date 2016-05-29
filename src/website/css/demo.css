@@ -6,6 +6,7 @@
   flex-direction: column;
   padding: 50px;
   align-items: center;
+  text-align: center;
 }
 
 .column {

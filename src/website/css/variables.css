@@ -1,6 +1,24 @@
-// Colors
-// Cool Iris #05A8C0 rgb(5, 168, 192)
-// redliz #B61C2F rgb(182, 28, 47)
-// 1,000 Apologies #35353C rgb(53, 53, 60)
-// darker plumange #007A7B rgb(0, 122, 123)
-// miamis team #009B9E rgb(0, 155, 158)
+/* 
+ Color Pallette stuff
+ Cool Iris #05A8C0 rgb(5, 168, 192)
+ redliz #B61C2F rgb(182, 28, 47)
+ 1,000 Apologies #35353C rgb(53, 53, 60)
+ darker plumange #007A7B rgb(0, 122, 123)
+ miamis team #009B9E rgb(0, 155, 158)
+*/
+.systemText {
+  font-family: monospace;
+}
+
+.borderSizing {
+  box-sizing: border-box;
+}
+.standardBorder {
+  composes: borderSizing;
+  border: 2px solid rgb(0, 155, 158);
+}
+
+.sectionBorder {
+  composes: borderSizing;
+  border: 2px solid rgb(53, 53, 60);
+}

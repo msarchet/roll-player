@@ -5,25 +5,27 @@ import DieRoll from './dieRoll';
 const ChatMessage = ({count, messageObj}) => {
   let messageType = messageObj.type;
   let message = messageObj.message; 
+  let messageContent = null;
   if(messageType === 'chat') {
-      return(
-        <div className={styles.container} key={count}>
-          <div className={styles.plainChat}>{message.message}</div>
-        </div>
-      );
+    messageContent = (<div className={styles.plainChat}>{message.message}</div>)
   } else if(messageType === 'rolled') {
-    return (
-      <div className={styles.container} key={count}>
-        <DieRoll className={styles.dieRoll} roll={message} />
-      </div>
-    ) 
+    messageContent = (<DieRoll className={styles.dieRoll} roll={message} />) 
+  } else if(messageType === 'system') {
+    messageContent = (
+      <div className = {styles.system}>{message.message}</div>
+    )
   } else {
-      return(
-        <div className={styles.container} key={count}>
+      messageContent = (
           <div className={styles.plainChat}>{message.message}</div>
-        </div>
       );
   }
+  console.log('message content', messageContent);
+
+  return (
+    <div className={styles.container} key={count}>
+      {messageContent}
+    </div>
+  )
 }
 
 export default ChatMessage;

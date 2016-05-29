@@ -1,7 +1,9 @@
 .outerContainer {
-  display: flex;
   flex: 1;
+  display: flex;
+  margin-left: auto;
   flex-direction: column;
+  height: 100%;
 }
 
 .header {
@@ -14,13 +16,19 @@
 }
 
 .plainChat {
-  font-size: 14px;
+  font-size: 1em;
+}
+
+.system {
+  composes: systemText from './variables.css';
 }
 
 .messages {
-  flex: 1;
   overflow-y: auto;
-  padding-right: 10px;
+  padding: 5px;
+  composes: standardBorder from './variables.css';
+  border-bottom: 0;
+  flex: 1;
 }
 
 .inputContainer {
