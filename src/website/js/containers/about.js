@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import Icon from './icon';
 import styles from '../../css/demo.css';
+import FontAwesome from 'react-fontawesome';
 
 const About = () => (
   <div className={styles.about}>

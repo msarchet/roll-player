@@ -22,3 +22,8 @@
   border: 0;
   padding: 10px;
 }
+
+.send:disabled {
+  background-color: rgb(0, 117, 118);
+  cursor: not-allowed;
+}

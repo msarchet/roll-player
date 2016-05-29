@@ -8,8 +8,8 @@ export const fields = ['message'];
 
 const chatForm = ({fields, handleSubmit}) => (
   <form onSubmit={handleSubmit} className={styles.container}>
-    <input type="text" placeholder="Message" {...fields.message} className={styles.input}/>
-    <button onClick={handleSubmit} className={styles.send}>
+    <input type="text" placeholder="/roll 1d4" {...fields.message} className={styles.input}/>
+    <button onClick={handleSubmit} className={styles.send} disabled={!(fields.message.value)}>
       Roll
     </button>
   </form> 
