@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.helpText {
+    margin: 5px;
+}
+.title {
+  font-family: sans-serif;
+}
+
+.navHeader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: white;
+  font-family: sans-serif;
+}
+
+.navItem {
+    flex: 1;
+    padding: 5px;
+    background-color: rgba(53, 53, 60, 0.8);
+}
+.leftContainer {
+  composes: navItem;
+  text-align: end;
+  padding-right: 20px;
+}
+
+.rightContainer {
+  composes: navItem;
+  padding-left: 20px;
+}
+
+.iconContainer {
+  font-size: 2em;
+  padding: 10px;
+  border-top: 0;
+  background-color: rgba(53, 53, 60, 0.8);
+  display: flex;
+  align-items: center;
+  border-radius: 0 0 10px 10px;
+}
+
+.icon {
+ height: 40px;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.content {
+  width: 80%;
+  padding-bottom: 20px;
+  flex: 1;
+  display: flex;
+}
+
+.about {
+  font-size: 18px;
+  font-family: arial;
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  align-items: center;
+}

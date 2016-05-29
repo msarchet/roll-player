@@ -9,8 +9,12 @@ class Socket extends React.Component {
     this.socket = getSocket();
     let { dispatch } = this.props;
     this.socket.on('message', payload => {
-      console.log('got message', payload);
       dispatch({type: 'NEW_MESSAGE', message: payload});
+    });
+
+    this.socket.on('error', () => {
+      console.log('ALERT');
+      dispatch({type: 'NEW_ALERT', message: 'There was an error with your last chat message'});
     });
   }
 

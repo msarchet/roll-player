@@ -17,28 +17,27 @@ const mockRoll = (values, sides) => {
 describe('Die parsing', () => {
   describe('Basics', () => {
     it('should return the number of dice', (done) => {
-      let parsed = roller.parse('2d6', (err, parsed) => {
-        expect(err).to.equal(null);
+      roller.parse('2d6').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd']);
         done();
       });
     });
 
     it('should return one die if no dice count is passed', () => {
-      let parsed = roller.parse('d6', (err, parsed) => {
+      roller.parse('d6').then(parsed => {
         expect(parsed).to.deep.equal(['6', 'd']);
       });
     });
 
     it('should handle multidigit rolls', done => {
-      roller.parse('2d20', (err, parsed) => {
+      roller.parse('2d20').then(parsed => {
         expect(parsed).to.deep.equal(['2', '20', 'd']);
         done();
       });
     });
 
     it('shoudld handle multidigit complex rolls', done => {
-      roller.parse('20d20k10+2', (err, parsed) => {
+      roller.parse('20d20k10+2').then(parsed => {
         expect(parsed).to.deep.equal(['20', '20', 'd', '10', 'k', '2', '+']);
         done();
       });
@@ -48,28 +47,28 @@ describe('Die parsing', () => {
 
   describe('rerolling dice', () => {
     it('should handle one time rerolls', done=> {
-      roller.parse('2d6ro1', (err, parsed) => {
+      roller.parse('2d6ro1').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd', '1', 'ro']);
         done();
       });
     });
 
     it('should handle a reroll', done => {
-      roller.parse('2d6r1', (err, parsed) => {
+      roller.parse('2d6r1').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd', '1', 'r']);
         done();
       });
     });
 
     it('should handle rerolls with a less target', done => {
-      roller.parse('2d6r<1', (err, parsed) => {
+      roller.parse('2d6r<1').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd', '1', 'r<']);
         done();
       });
     });
 
     it('should handle rerolls with a greater target', done => {
-      roller.parse('2d6r>1', (err, parsed) => {
+      roller.parse('2d6r>1').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd', '1', 'r>']);
         done();
       });
@@ -78,21 +77,21 @@ describe('Die parsing', () => {
 
   describe('With a modifier', () => {
     it('should handle a positive modifier', done => {
-      roller.parse('2d6+1', (err, parsed) => {
+      roller.parse('2d6+1').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd', '1', '+']);
         done();
       });
     });
 
     it('should handle a negative modifier', done => {
-      roller.parse('2d6-1', (err, parsed) => {
+      roller.parse('2d6-1').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd', '1', '-']);
         done();
       });
     });
     
     it('should handle a roll as a modifier', done => {
-      roller.parse('2d6+3d8', (err, parsed) => {
+      roller.parse('2d6+3d8').then(parsed => {
         expect(parsed).to.deep.equal(['2', '6', 'd', '3', '8', 'd', '+']);
         done();
       }); 
@@ -101,7 +100,7 @@ describe('Die parsing', () => {
 
   describe('with a keep', () => {
     it('should handle keeps', done => {
-      roller.parse('4d6k3', (err, parsed) => {
+      roller.parse('4d6k3').then(parsed => {
         expect(parsed).to.deep.equal(['4', '6', 'd', '3', 'k']);
         done();
       });
@@ -112,8 +111,7 @@ describe('Die parsing', () => {
 describe('Die Rolling', () => {
   describe('Basics', () => {
     it('should roll the parsed die correctly', (done) => {
-      roller.roll(['2', '6', 'd'], (err, rolled) => {
-        expect(err).to.equal(null);
+      roller.roll(['2', '6', 'd']).then(rolled => {
         expect(rolled.type).to.equal('roll');
         expect(rolled.number).to.equal(2);
         expect(rolled.sides).to.equal(6);
@@ -123,8 +121,7 @@ describe('Die Rolling', () => {
     });
 
     it('should adjust the roll with any modifiers', done => {
-      roller.roll(['1', '1', 'd', '1', '+'], (err, rolled) => {
-        expect(err).to.equal(null);
+      roller.roll(['1', '1', 'd', '1', '+']).then(rolled => {
         expect(rolled.value()).to.equal(2);
         done();
       });
@@ -132,14 +129,14 @@ describe('Die Rolling', () => {
 
     describe('keeping', () => {
       it('should keep the approriate number of rolls', done => {
-        roller.roll(['4', '1', 'd', '3', 'k'], (err, rolled) => {
+        roller.roll(['4', '1', 'd', '3', 'k']).then(rolled => {
           expect(rolled.value()).to.equal(3);
           done();
         });
       });
 
       it('should keep the correct rolls', done => {
-        roller.roll(['4', '6', 'd', '3', 'k'], (err, rolled) => {
+        roller.roll(['4', '6', 'd', '3', 'k']).then(rolled => {
           // find the 'lowest' value from the original Roll
           let orginalRolls = rolled.originalRoll.values.sort((a,b) => a > b ? -1 : 1);
           rolled.values.forEach((keptValue) => {
@@ -159,6 +156,7 @@ describe('Die Rolling', () => {
         let rerolled = roller.reroll(roll, 1, 'r');
         expect(rerolled.values).to.have.length(2);
         expect(rerolled.values[0]).to.have.property('roll').to.equal(2);
+        // need to properly test a rerolled die
         expect(rerolled.values[1]).to.have.property('roll').to.equal(2);
         expect(rerolled.values[1]).to.have.property('rerollCount');
         done();
@@ -169,13 +167,14 @@ describe('Die Rolling', () => {
         let rerolled = roller.reroll(roll, 1, 'ro');
         expect(rerolled.values).to.have.length(2);
         expect(rerolled.values[0]).to.have.property('roll').to.equal(2);
+        // need to properly test a rerolled die
         expect(rerolled.values[1]).to.have.property('roll');
         expect(rerolled.values[1]).to.have.property('rerollCount').to.equal(1);
         done();
       });
 
       it('should be able to reroll multiple times', done => {
-        roller.roll(['10', '6', 'd', '1', 'r', '2', 'r', '3', 'r'], (_err, rolled) => {
+        roller.roll(['10', '6', 'd', '1', 'r', '2', 'r', '3', 'r']).then(rolled => {
           console.log('values', rolled.values);
           done();
         });
@@ -185,7 +184,7 @@ describe('Die Rolling', () => {
     describe('combined', () => {
       it('should add modifiers to kept rolls', done => {
         // 4d6k3+1
-        roller.roll(['4', '6', 'd', '3', 'k', '1', '+'], (_err, rolled) => {
+        roller.roll(['4', '6', 'd', '3', 'k', '1', '+']).then(rolled => {
           expect(rolled.originalRoll.value()).to.equal(rolled.value() - 1);
           done();
         }); 
@@ -193,7 +192,7 @@ describe('Die Rolling', () => {
 
       it('should add modifiers to rerolled dice', done => {
         //4d1k3+1
-        roller.roll(['4', '1', 'd', '3', 'k', '1', '+'], (_err, rolled) => {
+        roller.roll(['4', '1', 'd', '3', 'k', '1', '+']).then(rolled => {
           expect(rolled.value()).to.equal(4);
           done();
         });
@@ -201,7 +200,7 @@ describe('Die Rolling', () => {
 
       it('should handle a complex roll', done => {
         // 9d9+4d6k3+2
-        roller.roll(['9', '9', 'd', '4', '6', 'd', '3', 'k', '+', '2', '+'], (_err, rolled) => {
+        roller.roll(['9', '9', 'd', '4', '6', 'd', '3', 'k', '+', '2', '+']).then(rolled => {
           let final = rolled.value();
           let d9Value = rolled.originalRoll.originalRoll.value();
           let d6Value = rolled.originalRoll.modifier.value();

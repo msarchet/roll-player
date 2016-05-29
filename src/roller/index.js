@@ -145,74 +145,79 @@ const operatorTable = {
   '-' : {precedence: 1, operators: createMath, args: 2}
 }
 
-const parse = (roll, callback) => {
-  // this currently requires two passes over the input
-  // for now this is fine. Since most commands are small
-  // this should be optimized at some point
-  let tokenized = roll.split('');
-  let index = 0;
-  let joined = [];
+const parse = (roll) => {
+  return new Promise((resolve, reject) => {
+    // this currently requires two passes over the input
+    // for now this is fine. Since most commands are small
+    // this should be optimized at some point
+    let tokenized = roll.split('');
+    let index = 0;
+    let joined = [];
 
-  let collected = [];
+    let collected = [];
 
-  while(index < tokenized.length) {
-    if(!isOperator(tokenized[index])) {
-      collected.push(tokenized[index]);
-    } else {
-      if(collected.length > 0) {
-        let join = collected.join('');
-        collected = [];
-        joined.push(join);
-      }
-      let token = tokenized[index];
-      if(token == 'r') {
-        let next = tokenized[index + 1];
-        if(next == 'o' || next == '<' || next == '>') {
-          token += next;
-          index++;
+    while(index < tokenized.length) {
+      if(!isOperator(tokenized[index])) {
+        collected.push(tokenized[index]);
+      } else {
+        if(collected.length > 0) {
+          let join = collected.join('');
+          collected = [];
+          joined.push(join);
         }
+        let token = tokenized[index];
+        if(token == 'r') {
+          let next = tokenized[index + 1];
+          if(next == 'o' || next == '<' || next == '>') {
+            token += next;
+            index++;
+          }
+        }
+        joined.push(token);
       }
-      joined.push(token);
+      index++;
     }
-    index++;
-  }
-  if(collected.length > 0) {
-    let join = collected.join('');
-    collected = [];
-    joined.push(join);
-  }
+    if(collected.length > 0) {
+      let join = collected.join('');
+      collected = [];
+      joined.push(join);
+    }
 
-  tokenized = joined;
-  let token = null; 
-  let output = [];
-  let operators = [];
-  // start construction of the tree
-  while(token = tokenized.shift()) {
-    if(isOperator(token)) {
+    tokenized = joined;
+    let token = null; 
+    let output = [];
+    let operators = [];
+    // start construction of the tree
+    while(token = tokenized.shift()) {
+      if(isOperator(token)) {
 
-      // this really should move all lower precendece operators off the stack
-      // this isn't a problem since we have no grouping operations
-      let top = operators[operators.length - 1];
-      if(top != null && operatorTable[top].precedence <= operatorTable[token].precedence) {
-        output.push(operators.pop());
+        // this really should move all lower precendece operators off the stack
+        // this isn't a problem since we have no grouping operations
+        let top = operators[operators.length - 1];
+        if(top != null && operatorTable[top].precedence <= operatorTable[token].precedence) {
+          output.push(operators.pop());
+        }
+        operators.push(token);
+        output.push(tokenized.shift() || 1);
+      } else {
+        output.push(token);
       }
-      operators.push(token);
-      output.push(tokenized.shift() || 1);
-    } else {
+    }
+
+    while(token = operators.pop()) {
       output.push(token);
     }
-  }
 
-  while(token = operators.pop()) {
-    output.push(token);
-  }
-  
-  callback(null, output);
+    resolve(output);
+  });
 }
 
-const roll = (rpn, callback) => {
+const roll = (rpn) => {
   let value = evaluate(rpn);
-  callback(null, value);
+  return new Promise((resolve, reject) => {
+    resolve(value);
+  });  
+
 };
 
 const evaluate = rpn => {

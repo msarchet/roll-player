@@ -1,5 +1,4 @@
 const chat = (state = [], action) => {
-  console.log('reducer action', action);
   switch(action.type) {
     case 'SEND_MESSAGE':
     case 'NEW_MESSAGE':

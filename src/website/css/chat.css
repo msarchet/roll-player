@@ -1,11 +1,27 @@
-.chat {
-  color: red;
+.outerContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.header {
+  font-family: sans-serif;
 }
 
 .container {
   list-style: none;
+  margin-bottom: 10px;
 }
 
 .plainChat {
   font-size: 14px;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: scroll;
+}
+
+.inputContainer {
+  display: flex;
 }
