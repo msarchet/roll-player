@@ -1,0 +1,22 @@
+.container {
+  composes: standardBorder from './variables.css';
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  overflow: scroll;
+  resize: both;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, .17);
+}
+
+.header {
+  height: 20px;  
+  width: 100%;
+}
+
+[draggable=true] {
+    cursor: move;
+}
+
+.resizable {
+}

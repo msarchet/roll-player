@@ -12,6 +12,20 @@ let store = createStore(combineReducers({
   rollPlayApp
 }));
 
+let panes = {};
+
+window.openPane = name => {
+  panes[name] && panes[name]();
+}
+
+window.registerPane = (name, callback) => {
+  panes[name] = callback;
+}
+
+window.unregisterPane = (name) => {
+  delete panes[name];
+}
+
 render(
   <Provider store={store} style={{border: '1px'}}>
     <App />
