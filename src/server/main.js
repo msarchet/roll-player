@@ -28,6 +28,26 @@ io.on('connection', (socket) => {
         console.error(err);
       });;
   });
+
+  socket.on('get_character', message => {
+    socket.emit('character_data', {
+      name: 'Fredick Milnor',
+      stats: [
+        {'STR': 10 },
+        {'DEX': 10 },
+        {'CON': 10 },
+        {'INT': 10 },
+        {'WIS': 10 },
+        {'CHA': 10 },
+      ],
+      skills: [
+        {label: 'Talking',  modifier: 1, modified_by: 'stats.CHA'},
+        {label: 'Eating',   modifier: 1, modified_by: 'stats.DEX'},
+        {label: 'Drinking', modifier: 1, modified_by: 'stats.CON'},
+        {label: 'Sleeping', modifier: 1, modified_by: 'stats.WIS'},
+      ]
+    });
+  });
 });
 
 server.listen(process.env.PORT || 9000, () => {

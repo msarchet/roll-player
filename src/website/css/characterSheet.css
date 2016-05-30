@@ -1,0 +1,16 @@
+.container {
+  composes: standardBorder from './variables.css';
+  display: flex;
+  flex-direction: column;
+}
+
+.characterName {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.skills {
+
+}
+
+.stats {}

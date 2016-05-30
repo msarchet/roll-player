@@ -1,8 +1,8 @@
 let socket = null;
-export const getSocket = () => {
+export let getSocket = () => {
   if(socket) {
     return socket;
   }
-
-  return socket = io();
+  socket = io();
+  return socket;
 }

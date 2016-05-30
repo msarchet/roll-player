@@ -1,19 +1,20 @@
 import {connect} from 'react-redux';
 import React from 'react';
 import {getSocket} from '../sockets';
+
 class Socket extends React.Component {
   constructor(props) {
     super(props);
   }
   componentDidMount() {
     this.socket = getSocket();
+
     let { dispatch } = this.props;
     this.socket.on('message', payload => {
       dispatch({type: 'NEW_MESSAGE', message: payload});
     });
 
     this.socket.on('error', () => {
-      console.log('ALERT');
       dispatch({type: 'NEW_ALERT', message: 'There was an error with your last chat message'});
     });
   }
