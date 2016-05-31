@@ -17,14 +17,7 @@
 }
 
 .send {
+  composes: standardButton from './variables.css';
   flex: 1;
-  background-color: rgb(0, 155, 158);
-  color: white; 
-  border: 0;
-  padding: 10px;
 }
 
-.send:disabled {
-  background-color: rgb(0, 117, 118);
-  cursor: not-allowed;
-}

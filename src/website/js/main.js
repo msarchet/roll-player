@@ -15,7 +15,9 @@ let store = createStore(combineReducers({
 let panes = {};
 
 window.openPane = name => {
-  panes[name] && panes[name]();
+  Object.keys(panes).forEach(function(key,index) {
+    panes[key](name);
+  });
 }
 
 window.registerPane = (name, callback) => {

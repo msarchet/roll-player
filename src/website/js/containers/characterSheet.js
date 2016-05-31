@@ -1,12 +1,9 @@
 import React from 'react';
+import FontAwesome from 'react-fontawesome';
+
 import {getSocket} from '../sockets';
 import styles from '../../css/characterSheet.css';
-
-const Skill = ({skill}) => (
-  <div>
-    {JSON.stringify(skill)}
-  </div>  
-);
+import Skill from './CharacterSheet/skill';
 
 class CharacterSheet extends React.Component {
   constructor(props) {
@@ -32,12 +29,18 @@ class CharacterSheet extends React.Component {
     if(this.state.fetchingData) {
       return (
         <div className={styles.container}>
-          Fetching Character Data...
+          <FontAwesome name='spinner' size={'2x'} style={{paddingRight: '5px'}}/>Fetching Character Data...
         </div>
       )
     }
     let {stats, name, skills} = this.state.characterData;
 
+    return (
+      <div className={styles.container}>
+        <div className={styles.characterName}>{name}</div>
+        In progress!
+      </div>
+    )
     return (
       <div className={styles.container}>
         <div className={styles.characterName}>{name}</div>

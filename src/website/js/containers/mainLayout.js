@@ -18,11 +18,6 @@ const MainLayout = ({children}) => (
       <div className={styles.navItem}>
         <Link className={styles.link} to="/about">About</Link>
       </div>
-      <div className={styles.navItem}>
-        <div onClick={() => {
-          window.openPane('characterSheet');
-        }}>Characters</div>
-      </div>
     </nav>
     <Sockets>
       <div className={styles.content}>

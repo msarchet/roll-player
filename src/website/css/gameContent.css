@@ -5,3 +5,17 @@
   align-items: center;
   flex-direction: column;
 }
+
+.addPane {
+  position: absolute;
+  composes: standardButton from './variables.css';
+  composes: standardBoxShadow from './variables.css';
+  
+  font-size: 14px;
+  font-weight: bold;
+  tex-transform: uppercase;
+  z-index: 3;
+  bottom: 20px;
+  left: 100px;
+}
+

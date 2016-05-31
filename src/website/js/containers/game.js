@@ -4,16 +4,19 @@ import Header from './headers';
 import Chat from './chat';
 import CharacterSheet from './CharacterSheet';
 import GameContent from './gameContent';
-import Pane from '../components/pane';
 
-const Game = () => (
-  <div className={styles.container}>
-    <GameContent />
-    <Chat />
-    <Pane paneName={'characterSheet'}>
-      <CharacterSheet />
-    </Pane>
-  </div>
-);
+class Game extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className={styles.container}>
+        <GameContent />
+      </div>
+    );
+  }
+}
 
 export default Game
