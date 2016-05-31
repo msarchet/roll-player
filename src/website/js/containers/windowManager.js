@@ -43,7 +43,7 @@ class WindowManager extends React.Component {
   render() {
     let panes = this.renderPanes();
     return (
-        <div style={{width: '100%', height: '100%', position: 'relative'}}>
+        <div style={{width: '100%', height: '100%', position: 'relative', flex : 1}}>
           {panes}
         </div>
     )
