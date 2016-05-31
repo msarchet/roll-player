@@ -35,6 +35,8 @@ class GameContent extends React.Component {
     let welcomeStyle = {
       width: '400px',
       height: '250px', 
+      top: '40px',
+      left: '10px'
     }
 
     panes.push(new PaneModel({

@@ -17,7 +17,7 @@
 }
 
 .send {
-  composes: standardButton from './variables.css';
+  composes: actionButton from './variables.css';
   flex: 1;
 }
 

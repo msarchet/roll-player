@@ -5,6 +5,7 @@
 }
 
 .navHeader {
+  composes: standardBoxShadow from './variables.css';
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -13,7 +14,7 @@
   width: 50px;
   background-color: rgb(53, 53, 60);
   padding-left: 5px;
-  box-shadow: 4px 1px 4px 0 rgba(0, 0, 0, .17);
+  z-index: 3;
 }
 
 .name {
