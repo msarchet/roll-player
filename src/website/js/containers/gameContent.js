@@ -1,46 +1,20 @@
 import React from 'react';
 import {Link} from 'react-router';
-import {filter} from 'lodash';
-
 import styles from '../../css/gameContent.css';
 import CharacterSheet from './characterSheet';
-import Pane from '../components/pane';
 import Chat from './chat';
+import WindowManager from './windowManager';
+import PaneModel from './paneModel';
+
 class GameContent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {panes : []}
-  }
-
-  getPaneId() {
-    return Math.random().toString();
-  }
-  addPanes(panes) {
-      this.setState({
-        panes: this.state.panes.concat(panes)    
-      });
-  }
-
-  renderPanes() {
-    return this.state.panes.map(paneObj => (
-        <Pane paneName={paneObj.paneId} 
-          {...paneObj.pane} 
-          closePane={this.closePane.bind(this)}>
-          {paneObj.content}
-        </Pane>
-      ));
-  }
-
-
-  closePane(paneName) {
-    // remove the pane from the list of panes
-    this.setState({
-      panes: filter(this.state.panes, p => p.paneId !== paneName)
-    });
+    this.state = {panes: []};
   }
 
   componentWillMount() {
     let panes = [];
+
     let chatStyle = {
       right: 0,
       top: 0,
@@ -48,43 +22,45 @@ class GameContent extends React.Component {
       width: '300px',
     }
 
-    panes.push({
+    panes.push(new PaneModel({
       pane: {
           title: 'Chat',
           style: chatStyle,
           isPinned: true,
           fullscreen: true
       }, 
-      paneId: this.getPaneId(),
       content: (<Chat />)
-    });
+    }));
 
     let welcomeStyle = {
       width: '400px',
       height: '250px', 
     }
 
-    panes.push({
+    panes.push(new PaneModel({
       pane: {
         title: 'Roll Player',
         style: welcomeStyle
       }, 
-      paneId: this.getPaneId(),
       content: (
         <div>
           <span>Welcome to Roll Player! Feel free to poke around for a little bit and look at all of the things</span>
-        
           <Link to={`/about`}>Learn More!</Link>
         </div>
-      )});
-      this.addPanes(panes);
+      )}));
+      this.setState({panes});
   }
 
   render() {
     return (
       <div className={styles.outerContainer}>
-        {this.renderPanes()}
-        <button className={styles.addPane} onClick={() => this.addPanes([{pane: {title: 'Character'},content: (<CharacterSheet />)}])}>
+        <WindowManager ref='wm' defaultPanes={this.state.panes}/>
+        <button className={styles.addPane} onClick={() => this.refs.wm.addPanes([new PaneModel({
+            pane: {
+              title: 'Character',
+            },
+            content: (<CharacterSheet />)
+          })])}>
           Add Pane
         </button>
       </div>
