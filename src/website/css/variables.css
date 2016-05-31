@@ -45,10 +45,18 @@
   composes: standardBackground;
   color: white; 
   border: 0;
-  padding: 10px;
+  height: 12px;
+  width: 12px; 
 }
 
 .standardButton:disabled {
   background-color: rgb(0, 117, 118);
   cursor: not-allowed;
+}
+
+.actionButton {
+  composes: standardButton;
+  padding: 10px;
+  width: auto;
+  height: auto;
 }

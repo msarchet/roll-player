@@ -8,7 +8,7 @@
 
 .addPane {
   position: absolute;
-  composes: standardButton from './variables.css';
+  composes: actionButton from './variables.css';
   composes: standardBoxShadow from './variables.css';
   
   font-size: 14px;
