@@ -2,6 +2,7 @@ import React from 'react';
 import FontAwesome from 'react-fontawesome';
 import Draggable from 'react-draggable';
 import styles from '../../css/pane.css';
+import ResizableAndMovable from 'react-resizable-and-movable';
 
 class Pane extends React.Component {
   constructor(props){
@@ -85,13 +86,11 @@ class Pane extends React.Component {
     }
 
     let handle = isPinned ? '' : '.handle';
-    let resizeValue = isPinned ? 'none': 'both';
-    style = style || {};
-    style.resize = resizeValue;
+    let paneStyle = isPinned ? style : {width: '100%', height: '100%'};
     let pane = (
       <div 
         className={className} 
-        style={style}
+        style={paneStyle}
         onClick={() => this.requestPane(this.props.paneName)}>
         <div className={styles.header + ' handle'}>
           <div className={styles.title}>
@@ -123,11 +122,14 @@ class Pane extends React.Component {
     }
 
     return (
-      <Draggable 
-        handle={handle} 
-        bounds="body">
+      <ResizableAndMovable
+        width={parseInt(style.width || 250)}
+        height={parseInt(style.height || 250)}
+        x={parseInt(style.left || 0)}
+        y={parseInt(style.top || 0)}
+        dragHandlerClassName={handle}>
         {pane}
-      </Draggable>
+      </ResizableAndMovable>
     )
   }
 }
