@@ -29,11 +29,14 @@
 
 .standardHeader {
   composes: standardBackground;
+  box-shadow: -2px -2px 2px 2px rgba(0, 0, 0, .17);
   color: white;
   font-size: .8em;
-  width: 100%;
+  width: auto;
   display: flex;
   box-sizing: border-box;
+  border-bottom-left-radius: 5px;
+  padding: 5px;
 }
 
 .sectionBorder {
