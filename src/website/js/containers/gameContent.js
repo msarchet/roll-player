@@ -26,7 +26,9 @@ class GameContent extends React.Component {
       pane: {
           title: 'Chat',
           style: chatStyle,
-          isPinned: true
+          isPinned: true,
+          isDocked: true,
+          docked: 'right'
       }, 
       content: (<Chat />)
     }));

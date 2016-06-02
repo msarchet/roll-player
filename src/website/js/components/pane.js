@@ -7,18 +7,50 @@ import ResizableAndMovable from 'react-resizable-and-movable';
 class Pane extends React.Component {
   constructor(props){
     super(props);
+    let {style} = this.props;
+    let size = {
+      width: style.width ? parseInt(style.width) : 400,
+      height: style.height ? parseInt(style.height) : 400
+    }
+
     this.state = {
       visible: true, 
-      top: 0,
-      left: 0,
       isActive: true,
       isFullscreen: this.props.fullscreen,
-      isPinned: this.props.isPinned
+      isPinned: this.props.isPinned,
+      position: {x: 0, y: 0},
+      size
     }
+  }
+
+  resize() {
+    if(this.props.isDocked) {
+      if(this.props.dock === 'right') {
+        this.adjustPosition();
+      }
+    }
+  }
+
+  adjustPosition() {
+    let {isDocked, dock, docked} = this.props;
+
+    let position = Object.assign({}, this.state.position);
+    let size = Object.assign({}, this.state.size);
+
+    if(isDocked) {
+      if(docked === 'right') {
+        let left = document.body.clientWidth - size.width;
+        position.x = left;
+        size.height = document.body.clientHeight;
+      }
+    }
+
+    this.setState({position, size});
   }
 
   componentDidMount() {
     window.registerPane(this.props.paneName, this.paneRequested.bind(this)); 
+    this.adjustPosition();
   }
 
   componentWillUnmount() {
@@ -63,7 +95,9 @@ class Pane extends React.Component {
       children,
       defaultPosition, 
       isFullscreen,
-      closePane
+      closePane,
+      isDocked,
+      docked
     } = this.props;
     let {
       isPinned
@@ -72,21 +106,13 @@ class Pane extends React.Component {
     if(this.state.visible === false) {
       return false;
     }
+
     let className = styles.container;
-
     if(this.state.isActive) {
-      if(this.state.isFullscreen) {
-        className = styles.fullscreenActive;
-      }
       className = styles.active;
-    } else {
-      if(this.state.isfullscreen) {
-        className = styles.fullscreen;
-      }
-    }
-
-    let handle = isPinned ? '' : '.handle';
-    let paneStyle = isPinned ? style : {width: '100%', height: '100%'};
+    } 
+    let handle = '.handle';
+    let paneStyle = {width: '100%', height: '100%'};
     let pane = (
       <div 
         className={className} 
@@ -119,16 +145,11 @@ class Pane extends React.Component {
       </div>
     );
 
-    if(isPinned) {
-      return pane;
-    }
-
     return (
       <ResizableAndMovable
-        width={parseInt(style.width || 250)}
-        height={parseInt(style.height || 250)}
-        x={parseInt(style.left || 0)}
-        y={parseInt(style.top || 0)}
+        moveAxis={isPinned ? 'none' : 'both'}
+        {...this.state.size}
+        {...this.state.position}
         dragHandlerClassName={handle}>
         {pane}
       </ResizableAndMovable>

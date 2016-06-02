@@ -6,6 +6,7 @@ const ChatMessage = ({count, messageObj}) => {
   let messageType = messageObj.type;
   let message = messageObj.message; 
   let messageContent = null;
+
   if(messageType === 'chat') {
     messageContent = (<div className={styles.plainChat}>{message.message}</div>)
   } else if(messageType === 'rolled') {
