@@ -24,7 +24,13 @@ class Socket extends React.Component {
   }
 
   render() {
-    return (this.props.children);
+    const children = React.Children.map(this.props.children, child => {
+      return React.cloneElement(child, {
+        socket: this.socket
+      });
+    });
+
+    return (<div>{children}</div>);
   }
 }
 

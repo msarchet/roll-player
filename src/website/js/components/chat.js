@@ -15,7 +15,6 @@ const chatWelcome = [
 const Chat = ({chat, send}) => {
   let count = 0;
   chat = chatWelcome.concat(chat);
-  console.log(chat);
   let messages = chat.map(message => {
     count++;
     return (<ChatMessage key={count} messageObj={message} />)

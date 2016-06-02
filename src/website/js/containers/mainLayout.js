@@ -6,7 +6,7 @@ import styles from '../../css/nav.css';
 import Icon from './icon';
 
 const MainLayout = ({children}) => (
-  <div id="derp" className={styles.container}>
+  <div className={styles.container}>
     <nav className={styles.navHeader}>
       <div className={styles.iconContainer}>
         <span className={styles.name}>Roll Player</span>
