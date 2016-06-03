@@ -2,13 +2,14 @@ import React from 'react';
 import {Link} from 'react-router';
 import styles from '../../css/gameContent.css';
 import CharacterSheet from './characterSheet';
-import Chat from './chat';
+import Chat from '../components/chat';
 import WindowManager from './windowManager';
 import PaneModel from './paneModel';
 
 class GameContent extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props);
     this.state = {panes: []};
   }
 
@@ -30,7 +31,7 @@ class GameContent extends React.Component {
           isDocked: true,
           docked: 'right'
       }, 
-      content: (<Chat />)
+      content: (<Chat socket={this.props.socket}/>)
     }));
 
     let welcomeStyle = {

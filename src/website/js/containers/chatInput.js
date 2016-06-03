@@ -1,24 +1,36 @@
 import React from 'react';
-import { reduxForm } from 'redux-form';
 import FontAwesome from 'react-fontawesome';
-
 import styles from '../../css/chatInput.css';
 
 export const fields = ['message'];
 
-const chatForm = ({fields, handleSubmit}) => (
-  <form onSubmit={handleSubmit} className={styles.container}>
-    <input type="text" placeholder="/roll 1d4" {...fields.message} className={styles.input}/>
-    <button onClick={handleSubmit} className={styles.send} disabled={!(fields.message.value)}>
-      Roll
-    </button>
-  </form> 
-)
+class chatForm extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {message: ''}
+  }
 
-const chatInput = reduxForm({
-  form: 'chatInput',
-  fields 
-})(chatForm)
+  setMessage(e) {
+    this.setState({message: e.target.value});
+  }
 
-export default chatInput
+  handleSubmit(e) {
+    this.setState({message: ''});
+    e.preventDefault();
+    this.props.onSubmit({message: this.state.message});
+  }
+
+  render() {
+    return(
+      <form onSubmit={this.handleSubmit.bind(this)} className={styles.container}>
+        <input type="text" placeholder="/roll 1d4" className={styles.input} onChange={this.setMessage.bind(this)} value={this.state.message}/>
+        <button onClick={this.handleSubmit.bind(this)} className={styles.send} disabled={!(this.state.message)}>
+          Roll
+        </button>
+      </form>
+    )
+  }
+}
+
+export default chatForm
 

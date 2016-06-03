@@ -19,11 +19,11 @@ const MainLayout = ({children}) => (
         <Link className={styles.link} to="/about">About</Link>
       </div>
     </nav>
-    <Sockets>
-      <div className={styles.content}>
+    <div className={styles.content}>
+      <Sockets>
         {children}
-      </div>
-    </Sockets>
+      </Sockets>
+    </div>
   </div>
 );
 

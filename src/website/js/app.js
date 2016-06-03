@@ -7,8 +7,11 @@ import GameContent from './containers/gameContent';
 import About from './containers/about';
 import MainLayout from './containers/mainLayout';
 
+const createElement = (Component, props) => {
+  return <Component {...props} />
+}
 const App = () => (
-    <Router history={browserHistory}>
+    <Router history={browserHistory} createElement={createElement}>
       <Route component={MainLayout}>
         <Route path="/" component={GameContent} />
         <Route path="/about" component={About} />

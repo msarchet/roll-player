@@ -3,14 +3,7 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers} from 'redux';
 
-import rollPlayApp from './reducers';
-import {reducer as formReducer} from 'redux-form';
 import App from './app';
-
-let store = createStore(combineReducers({
-  form: formReducer,
-  rollPlayApp
-}));
 
 let panes = {};
 
@@ -29,7 +22,5 @@ window.unregisterPane = (name) => {
 }
 
 render(
-  <Provider store={store} style={{border: '1px'}}>
-    <App />
-  </Provider>
+  <App />
 , document.getElementById('main'));
