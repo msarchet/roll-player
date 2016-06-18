@@ -4,7 +4,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const favicon = require('serve-favicon');
-
+const {includes, } = require('lodash');
 let app = express();
 
 let server = http.Server(app);
@@ -16,11 +16,25 @@ app.use(favicon(path.join(__dirname, 'favicon.ico')));
 app.use('/static', express.static('./build/website'));
 
 app.get('/roll/:roll', (req, res) => {
+  let generateTitle = message => {
+    return `<html><head><title>${message}</title></head></html>`
+  }
   let result = socketHandler.parse({type: 'chat', message: {message: '/roll ' + req.params.roll}}).then(result => {  
-    res.send('<html><head><title>&#x2694;You rolled ' + req.params.roll + ' and got ' + result.message.value  + '</title></head></html>'); 
+    let message = `&#x2694;You rolled ${req.params.roll} and got ${result.message.value}`;
+    res.send(generateTitle(message)); 
   }).catch(err => {
     console.log(err);
-    res.send('<html><head><title>You were eaten by a grue</title></head></html>'); 
+    let failures = [
+      'You were eaten by a grue!', 
+      'You died of disentary',
+      'Critical Error!'
+    ];
+    roller.roll(['d', '3']).then(result => {
+      res.send(generateTitle(failures(result.value()))); 
+    }).catch(err => {
+      console.log(err);
+      res.send(generateTitle('wow that really broke'));
+    });
   });
 });
 
