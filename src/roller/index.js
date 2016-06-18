@@ -241,10 +241,10 @@ const evaluate = rpn => {
   let value = null;
   switch(token) {
     case 'd':
-      if(left.value) {
+      if(left && left.value) {
         left = left.value();
       }
-      if(right.value) {
+      if(right && right.value) {
         right = right.value();
       }
       value = createDie(left, right);
