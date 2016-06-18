@@ -241,6 +241,12 @@ const evaluate = rpn => {
   let value = null;
   switch(token) {
     case 'd':
+      if(left.value) {
+        left = left.value();
+      }
+      if(right.value) {
+        right = right.value();
+      }
       value = createDie(left, right);
       break;
     case 'k':
