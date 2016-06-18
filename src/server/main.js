@@ -17,20 +17,25 @@ app.use('/static', express.static('./build/website'));
 
 app.get('/roll/:roll', (req, res) => {
   let generateTitle = message => {
-    return `<html><head><title>${message}</title></head></html>`
+    if(req.accepts('html')) {
+      return `<html><head><title>&#x2694;${message}</title><body>${message}</body></head></html>`
+    } else {
+      return message;
+    }
   }
-  let result = socketHandler.parse({type: 'chat', message: {message: '/roll ' + req.params.roll}}).then(result => {  
-    let message = `&#x2694;You rolled ${req.params.roll} and got ${result.message.value}`;
-    res.send(generateTitle(message)); 
+
+  let result = socketHandler.parse({type: 'chat', message: {message: '/roll ' + req.params.roll}}).then(result => {
+    let message = `You rolled ${req.params.roll} and got ${result.message.value}`;
+    res.send(generateTitle(message));
   }).catch(err => {
     console.log(err);
     let failures = [
-      'You were eaten by a grue!', 
+      'You were eaten by a grue!',
       'You died of disentary',
       'Critical Error!'
     ];
     roller.roll(['d', '3']).then(result => {
-      res.send(generateTitle(failures(result.value()))); 
+      res.send(generateTitle(failures(result.value())));
     }).catch(err => {
       console.log(err);
       res.send(generateTitle('wow that really broke'));
@@ -45,7 +50,7 @@ app.get('*', (req, res) => {
 io.on('connection', (socket) => {
   socket.on('message', message => {
     socketHandler.parse(message)
-      .then(result => {        
+      .then(result => {
         socket.emit('message', result);
       })
       .catch((err) => {
