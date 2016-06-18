@@ -3,6 +3,7 @@ const commands = require('./commands');
 const macros = require('./macros');
 module.exports = messageObj => {
   return new Promise((resolve, reject) => {
+    console.log(messageObj);
     let message = messageObj.message;
     // does this contain a macro
     macros.find(message.message).then(matched => {

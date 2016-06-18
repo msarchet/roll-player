@@ -11,8 +11,18 @@ let server = http.Server(app);
 let io = require('socket.io')(server);
 let socketHandler = require('./socket');
 
+app.set('view engine', 'pug');
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 app.use('/static', express.static('./build/website'));
+
+app.get('/roll/:roll', (req, res) => {
+  let result = socketHandler.parse({type: 'chat', message: {message: '/roll ' + req.params.roll}}).then(result => {  
+    res.send('<html><head><title>&#x2694;You rolled ' + req.params.roll + ' and got ' + result.message.value  + '</title></head></html>'); 
+  }).catch(err => {
+    console.log(err);
+    res.send('<html><head><title>You were eaten by a grue</title></head></html>'); 
+  });
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname , '../../build/website/html/index.html'));
